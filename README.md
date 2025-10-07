@@ -1,19 +1,6 @@
 # SecureIn Assessment
 
-This repository contains a complete Recipe Management System built for the SecureIn hiring process, including backend API, database setup, and a React-based frontend UI.
-
-## Project Structure
-
-```
-securein_assessment/
-├── frontend/           # React-based UI
-├── src/               # Backend API
-│   ├── models/        # Mongoose schemas
-│   └── server.js      # Express server
-├── scripts/           # Database import scripts
-├── US_recipes_null.json  # Recipe data
-└── Documentation files
-```
+This repository contains a complete Recipe Management System built for the SecureIn hiring process.
 
 ## Quick Start
 
@@ -57,5 +44,14 @@ npm start
 ```
 
 Frontend runs at: `http://localhost:3001`
+
+# Displaying the Nutririon section of each recipe along with the description and number of people served. 
+<img width="1917" height="913" alt="image" src="https://github.com/user-attachments/assets/f06b3f4f-af80-4cc0-a8f1-ef1576354e2d" />
+
+# Displayed the message when no result is found. 
+<img width="1902" height="520" alt="image" src="https://github.com/user-attachments/assets/25769916-09e3-4500-8ba5-a84c6c351b56" />
+
+# Querying specific to a certain cuisine
+<img width="1864" height="902" alt="image" src="https://github.com/user-attachments/assets/a1715dde-c9e2-4cbf-ba88-89caeda630fa" />
 
 
