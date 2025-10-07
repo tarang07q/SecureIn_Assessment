@@ -1,0 +1,16 @@
+const mongoose = require('mongoose');
+
+const RecipeSchema = new mongoose.Schema({
+  cuisine: { type: String },
+  title: { type: String, required: true },
+  rating: { type: Number, default: null },
+  prep_time: { type: Number, default: null },
+  cook_time: { type: Number, default: null },
+  total_time: { type: Number, default: null },
+  description: { type: String },
+  nutrients: { type: mongoose.Schema.Types.Mixed },
+  serves: { type: String },
+  calories_value: { type: Number, default: null }
+}, { timestamps: true });
+
+module.exports = mongoose.model('Recipe', RecipeSchema);
