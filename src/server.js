@@ -6,7 +6,6 @@ const Recipe = require('./models/recipe');
 
 const app = express();
 
-// Enable CORS for frontend
 app.use(cors({
   origin: 'http://localhost:3001',
   credentials: true
@@ -17,7 +16,6 @@ app.use(express.json());
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/recipes_db';
 const PORT = process.env.PORT || 3000;
 
-// Connect to MongoDB
 mongoose.connect(MONGO_URI)
   .then(() => {
     console.log('Connected to MongoDB');
@@ -27,7 +25,6 @@ mongoose.connect(MONGO_URI)
     process.exit(1);
   });
 
-// Helper function to parse numeric operators
 function parseNumericFilter(value) {
   if (!value) return null;
   
@@ -46,7 +43,6 @@ function parseNumericFilter(value) {
   return { operator, value: numValue };
 }
 
-// Helper function to build MongoDB query for numeric field
 function buildNumericQuery(operator, value) {
   switch (operator) {
     case '>=': return { $gte: value };
@@ -58,14 +54,11 @@ function buildNumericQuery(operator, value) {
   }
 }
 
-// GET /api/recipes - Get all recipes with pagination and sorting
 app.get('/api/recipes', async (req, res) => {
   try {
-    // Parse and validate pagination parameters
     let page = parseInt(req.query.page);
     let limit = parseInt(req.query.limit);
     
-    // Set defaults and boundaries
     if (!page || page < 1 || isNaN(page)) {
       page = 1;
     }
@@ -73,18 +66,15 @@ app.get('/api/recipes', async (req, res) => {
     if (!limit || limit < 1 || isNaN(limit)) {
       limit = 10;
     }
-    
-    // Max limit to prevent overload
-    if (limit > 100) {
-      limit = 100;
+    if (limit > 50) {
+      limit = 50;
     }
     
     const skip = (page - 1) * limit;
-    
-    // Get total count and paginated data
+
     const total = await Recipe.countDocuments();
     const data = await Recipe.find()
-      .sort({ rating: -1, _id: 1 }) // Sort by rating desc, then by id for consistency
+      .sort({ rating: -1, _id: 1 })
       .skip(skip)
       .limit(limit)
       .select('-__v -createdAt -updatedAt')
@@ -103,13 +93,11 @@ app.get('/api/recipes', async (req, res) => {
   }
 });
 
-// GET /api/recipes/search - Search recipes with filters
 app.get('/api/recipes/search', async (req, res) => {
   try {
     const query = {};
     const allowedParams = ['title', 'cuisine', 'calories', 'rating', 'total_time'];
-    
-    // Validate that only allowed parameters are used
+
     const providedParams = Object.keys(req.query);
     const invalidParams = providedParams.filter(param => !allowedParams.includes(param));
     
@@ -121,15 +109,13 @@ app.get('/api/recipes/search', async (req, res) => {
       });
     }
     
-    // Title filter - partial match, case-insensitive
     if (req.query.title) {
       const titleValue = String(req.query.title).trim();
       if (titleValue) {
         query.title = { $regex: titleValue, $options: 'i' };
       }
     }
-    
-    // Cuisine filter - exact match, case-insensitive
+
     if (req.query.cuisine) {
       const cuisineValue = String(req.query.cuisine).trim();
       if (cuisineValue) {
@@ -137,7 +123,7 @@ app.get('/api/recipes/search', async (req, res) => {
       }
     }
     
-    // Calories filter with operators
+
     if (req.query.calories) {
       const parsed = parseNumericFilter(req.query.calories);
       if (parsed) {
@@ -145,18 +131,17 @@ app.get('/api/recipes/search', async (req, res) => {
       } else {
         return res.status(400).json({
           error: 'Invalid calories format. Use: >=400, <=300, >200, <500, =250, or just 250'
-        });
+        });0
       }
     }
     
-    // Rating filter with operators
     if (req.query.rating) {
       const parsed = parseNumericFilter(req.query.rating);
       if (parsed) {
         query.rating = buildNumericQuery(parsed.operator, parsed.value);
       } else {
         return res.status(400).json({
-          error: 'Invalid rating format. Use: >=4.5, <=3.0, >4, <5, =5, or just 4.5'
+          error: 'Invalid rating format'
         });
       }
     }
@@ -168,12 +153,11 @@ app.get('/api/recipes/search', async (req, res) => {
         query.total_time = buildNumericQuery(parsed.operator, parsed.value);
       } else {
         return res.status(400).json({
-          error: 'Invalid total_time format. Use: >=60, <=30, >45, <90, =60, or just 60'
+          error: 'Invalid total_time format.'
         });
       }
     }
-    
-    // Execute query
+
     const data = await Recipe.find(query)
       .select('-__v -createdAt -updatedAt')
       .lean();
@@ -186,12 +170,10 @@ app.get('/api/recipes/search', async (req, res) => {
   }
 });
 
-// 404 handler
 app.use((req, res) => {
   res.status(404).json({ error: 'Endpoint not found' });
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });

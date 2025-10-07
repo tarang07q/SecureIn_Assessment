@@ -52,9 +52,22 @@ async function main() {
     };
   });
 
-  console.log('Inserting', docs.length, 'documents');
+  console.log('Total recipes in JSON file:', docs.length);
+  console.log('Clearing existing recipes...');
   await Recipe.deleteMany({});
-  await Recipe.insertMany(docs, { ordered: false });
+  console.log('Inserting all recipes (including null values)...');
+  
+  const batchSize = 1000;
+  let inserted = 0;
+  for (let i = 0; i < docs.length; i += batchSize) {
+    const batch = docs.slice(i, i + batchSize);
+    await Recipe.insertMany(batch, { ordered: false });
+    inserted += batch.length;
+    console.log(`Inserted ${inserted}/${docs.length} recipes...`);
+  }
+  
+  const finalCount = await Recipe.countDocuments();
+  console.log('Done! Total recipes in database:', finalCount);
   console.log('Done inserting');
   process.exit(0);
 }
