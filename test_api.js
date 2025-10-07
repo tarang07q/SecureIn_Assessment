@@ -73,8 +73,7 @@ async function runTests() {
     if (test5.data.length > 0) {
       console.log(`   Sample: "${test5.data[0].title}" (rating: ${test5.data[0].rating})`);
     }
-    
-    // Test 6: Search by calories (<=400)
+
     console.log('\n📋 Test 6: Search by calories <= 400');
     const test6 = await makeRequest('/api/recipes/search?calories=%3C%3D400');
     console.log(`   Records found: ${test6.data.length}`);
@@ -82,7 +81,6 @@ async function runTests() {
       console.log(`   Sample: "${test6.data[0].title}" (${test6.data[0].calories_value} cal)`);
     }
     
-    // Test 7: Search by total_time (<60)
     console.log('\n📋 Test 7: Search by total_time < 60');
     const test7 = await makeRequest('/api/recipes/search?total_time=%3C60');
     console.log(`   Records found: ${test7.data.length}`);
@@ -90,7 +88,6 @@ async function runTests() {
       console.log(`   Sample: "${test7.data[0].title}" (${test7.data[0].total_time} min)`);
     }
     
-    // Test 8: Combined search
     console.log('\n📋 Test 8: Combined search (title=pie, rating>=4.5, calories<=400)');
     const test8 = await makeRequest('/api/recipes/search?title=pie&rating=%3E%3D4.5&calories=%3C%3D400');
     console.log(`   Records found: ${test8.data.length}`);
@@ -101,7 +98,6 @@ async function runTests() {
     
     console.log('\n' + '='.repeat(60));
     console.log('✅ All tests passed!');
-    console.log('\n💡 Tip: Open http://localhost:3000/api/recipes in your browser');
     
   } catch (error) {
     console.log('\n' + '='.repeat(60));

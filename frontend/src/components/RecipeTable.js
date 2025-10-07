@@ -30,7 +30,7 @@ const RecipeTable = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(15);
+  const [rowsPerPage, setRowsPerPage] = useState(30);
   const [total, setTotal] = useState(0);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -223,7 +223,7 @@ const RecipeTable = () => {
               No results found
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Try adjusting your filters or search criteria. Nice to Have!
+              Try adjusting your filters or search criteria. Nice to Have.
             </Typography>
           </Box>
         )}
@@ -272,7 +272,7 @@ const RecipeTable = () => {
 
             {/* Pagination */}
             <TablePagination
-              rowsPerPageOptions={[15, 25, 50]}
+              rowsPerPageOptions={[15, 30, 50, 100]}
               component="div"
               count={total}
               rowsPerPage={rowsPerPage}

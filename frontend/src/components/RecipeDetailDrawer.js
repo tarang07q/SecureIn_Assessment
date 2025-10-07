@@ -19,7 +19,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 const RecipeDetailDrawer = ({ recipe, open, onClose }) => {
   const [expandedTime, setExpandedTime] = React.useState(false);
-  const [expandedNutrition, setExpandedNutrition] = React.useState(false);
+  const [expandedNutrition, setExpandedNutrition] = React.useState(true);
 
   if (!recipe) return null;
 
@@ -61,14 +61,16 @@ const RecipeDetailDrawer = ({ recipe, open, onClose }) => {
 
         <Divider sx={{ my: 2 }} />
 
-        {/* Description */}
+        {/* Description - Key/Value Pair */}
         <Box sx={{ mb: 3 }}>
-          <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-            Description
-          </Typography>
-          <Typography variant="body2">
-            {recipe.description || 'No description available'}
-          </Typography>
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Typography variant="subtitle2" color="text.secondary">
+              Description:
+            </Typography>
+            <Typography variant="body2">
+              {recipe.description || 'No description available'}
+            </Typography>
+          </Box>
         </Box>
 
         {/* Total Time with Expand */}
